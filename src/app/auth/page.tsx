@@ -18,7 +18,7 @@ export default async function Home(request: any) {
 		client_secret: process.env.ClientSecret as string,
 		grant_type: 'authorization_code',
 		code: code.toString(),
-		redirect_uri: 'http://localhost:3000/auth',
+		redirect_uri: 'https://www.xernerx.xyz/auth',
 	});
 
 	console.log('Requesting token from Discord...');
