@@ -96,9 +96,9 @@ export default async function Home(request: any) {
 			<h2>Your Servers</h2>
 			<div className="grid-list">
 				{guilds.data.map((g: any) => (
-					<div className="grid-item">
+					<div key={g.id} className="grid-item">
 						<center>
-							<img key={g.id} className="rounded-full icon" src={`https://cdn.discordapp.com/icons/${g.id}/${g.icon}.webp`}></img>
+							<img className="rounded-full icon" src={`https://cdn.discordapp.com/icons/${g.id}/${g.icon}.webp`}></img>
 
 							<p>{g.name}</p>
 						</center>
