@@ -26,7 +26,9 @@ export default function RootLayout({
 							<img className="icon" src="/icons/XernerxLogoPurple.png"></img>
 						</div>
 						<div>
-							<img className="icon icon-clr" src="/icons/ProfileIcon.png"></img>
+							<a href="https://discord.com/oauth2/authorize?client_id=1236707962383241288&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth&scope=identify+email+guilds.join+guilds+connections+openid+rpc">
+								<img className="icon icon-clr" src="/icons/ProfileIcon.png"></img>
+							</a>
 						</div>
 					</div>
 					<div className="rainbow"></div>

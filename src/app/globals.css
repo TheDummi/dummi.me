@@ -14,10 +14,21 @@
 }
 
 header {
-	position: relative;
+	position: fixed;
+	width: 100%;
 	background-color: var(--xernerx-black);
 	color: var(--xernerx-purple);
-	box-shadow: 0, 0, 2px, 2px, rgba(0, 0, 0, 0.4);
+	height: 6vh;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	color: var(--xernerx-purple);
+	z-index: 1;
+}
+
+main {
+	position: absolute;
+	width: 100%;
+	top: 7vh;
 }
 
 .rainbow {
@@ -45,10 +56,45 @@ header {
 	filter: invert(100%);
 }
 
-header {
-	height: 5vh;
-	padding-top: 5px;
-	padding-bottom: 5px;
+h1 {
+	font-size: xx-large;
+}
+
+h2 {
+	font-size: x-large;
+}
+
+h3 {
+	font-size: larger;
+}
+
+h4 {
+	font-size: large;
+}
+h1,
+h2,
+h3,
+h4 {
+	font-weight: bold;
+}
+
+.grid-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 200px);
+}
+
+.grid-item {
+	display: flex;
+	flex-direction: column;
+	background-color: rgba(0, 0, 0, 0.1);
+	box-shadow: 2px 2px 4px 4px rgba(0, 0, 0, 0.4);
+	border-radius: 0.5rem;
+	padding: 5px;
+	margin: 5px;
+}
+
+.grid-item:hover {
+	background-color: var(--xernerx-black);
 }
 
 .space {
@@ -59,8 +105,24 @@ header {
 body {
 	position: relative;
 	background-color: var(--xernerx-grey);
+	color: white;
+	margin: 0;
+}
+
+.id-card {
+	position: absolute;
+	margin: 15px;
+	right: 0;
+	background-color: #2e3035;
+	padding: 10px;
+	box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.4);
+	border-radius: 0.5rem;
 }
 
 .icon {
-	height: 35px;
+	height: 45px;
+}
+
+.banner {
+	width: 100%;
 }
