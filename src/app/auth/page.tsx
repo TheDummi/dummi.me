@@ -1,37 +1,41 @@
 /** @format */
 
-import { config } from 'dotenv';
 import axios from 'axios';
 import url from 'url';
-
+import { config } from 'dotenv';
+import mongoose from 'mongoose';
 config();
 
 export default async function Home(request: any) {
 	const code = request.searchParams.code;
 
-	if (!code) return;
+	if (!code) return <main>Something went wrong trying to sign in...</main>;
 
-	console.log(`Successfully authorized with code: ${code}`);
+	console.info(`Successfully authorized with code: ${code}`);
 
 	const formData = new url.URLSearchParams({
 		client_id: process.env.ClientId as string,
 		client_secret: process.env.ClientSecret as string,
 		grant_type: 'authorization_code',
 		code: code.toString(),
-		redirect_uri: 'https://www.xernerx.xyz/auth',
+		redirect_uri: JSON.parse(process.env.Production as string) ? 'https://www.xernerx.xyz/auth' : 'http://localhost:3000/auth',
 	});
 
-	console.log('Requesting token from Discord...');
+	console.info('Requesting token from Discord...');
 
-	const output = await axios.post('https://discord.com/api/v10/oauth2/token', formData, {
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded',
-		},
-	});
+	const output = await axios
+		.post('https://discord.com/api/v10/oauth2/token', formData, {
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+		})
+		.catch(() => null);
 
-	console.log(`Successfully authorized with token: ${output.data.acccess_token}`);
+	if (!output) return <main>Something went wrong trying to sign in... Try again.</main>;
 
 	let token = output.data.access_token;
+
+	console.info(`Successfully authorized with token: ${token}`);
 
 	const user = await axios.get('https://discord.com/api/v10/users/@me', {
 		headers: {
@@ -45,27 +49,42 @@ export default async function Home(request: any) {
 		},
 	});
 
-	console.log(user.data);
-
 	if (code) {
-		const refreshFormData = new url.URLSearchParams({
-			client_id: process.env.ClientId as string,
-			client_secret: process.env.ClientSecret as string,
-			grant_type: 'refresh_token',
-			refresh_token: output.data.refresh_token,
-		});
+		const exist = await mongoose.model('account').exists({ id: user.data.id });
 
-		console.log('Requesting token from Discord...');
+		exist
+			? await mongoose.model('account').updateOne(
+					{
+						access: {
+							token: output.data.access_token,
+							refresh: output.data.refresh_token,
+							expires: Number(new Date()) + output.data.expires_in,
+						},
+					},
+					{ id: user.data.id }
+			  )
+			: await mongoose.model('account').create({
+					id: user.data.id,
+					access: {
+						token: output.data.access_token,
+						refresh: output.data.refresh_token,
+						expires: Number(new Date()) + output.data.expires_in,
+					},
+			  });
 
-		const refresh = await axios.post('https://discord.com/api/v10/oauth2/token', refreshFormData, {
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-		});
-
-		token = refresh.data.access_token;
-
-		console.log(`https://cdn.discordapp.com/avatars/${user.data.id}/${user.data.avatar}.webp`, 'https://cdn.discordapp.com/icons/${g.id}/${g.icon}.webp');
+		// const refreshFormData = new url.URLSearchParams({
+		// 	client_id: process.env.ClientId as string,
+		// 	client_secret: process.env.ClientSecret as string,
+		// 	grant_type: 'refresh_token',
+		// 	refresh_token: output.data.refresh_token,
+		// });
+		// console.log('Requesting token from Discord...');
+		// const refresh = await axios.post('https://discord.com/api/v10/oauth2/token', refreshFormData, {
+		// 	headers: {
+		// 		'Content-Type': 'application/x-www-form-urlencoded',
+		// 	},
+		// });
+		// token = refresh.data.access_token;
 	}
 	return (
 		<main>
