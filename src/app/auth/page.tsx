@@ -50,27 +50,25 @@ export default async function Home(request: any) {
 	});
 
 	if (code) {
-		const exist = await mongoose.model('account').exists({ id: user.data.id });
+		const author = await mongoose.model('account').findOne({ id: user.data.id });
 
-		exist
-			? await mongoose.model('account').updateOne(
-					{
-						access: {
-							token: output.data.access_token,
-							refresh: output.data.refresh_token,
-							expires: Number(new Date()) + output.data.expires_in,
-						},
-					},
-					{ id: user.data.id }
-			  )
-			: await mongoose.model('account').create({
-					id: user.data.id,
-					access: {
-						token: output.data.access_token,
-						refresh: output.data.refresh_token,
-						expires: Number(new Date()) + output.data.expires_in,
-					},
-			  });
+		if (author) {
+			author.access = {
+				token: output.data.access_token,
+				refresh: output.data.refresh_token,
+				expires: Number(new Date()) + output.data.expires_in,
+			};
+			author.save();
+		} else {
+			await mongoose.model('account').create({
+				id: user.data.id,
+				access: {
+					token: output.data.access_token,
+					refresh: output.data.refresh_token,
+					expires: Number(new Date()) + output.data.expires_in,
+				},
+			});
+		}
 
 		// const refreshFormData = new url.URLSearchParams({
 		// 	client_id: process.env.ClientId as string,
