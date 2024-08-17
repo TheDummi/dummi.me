@@ -1,6 +1,8 @@
 /** @format */
 'use client';
-import { useState } from 'react';
+import DestinyTeamViewer from '@/components/DestinyTeamViewer';
+import Loading from '@/components/Loading';
+import { Suspense, useState, lazy } from 'react';
 
 export default function Page() {
 	const root = `https://www.bungie.net/Platform`;
@@ -8,10 +10,15 @@ export default function Page() {
 	const clientID = '38825';
 
 	const [name, setName] = useState('');
+	const [error, setError] = useState('');
 	const [user, setUser]: any = useState(null);
+	const [users, setUsers]: any = useState([]);
 
 	async function searchPlayer() {
-		if (!name) return;
+		setError('');
+		setUser(null);
+
+		if (!name) return setError('Please enter a Bungie Display Name');
 
 		const [displayName, displayNameCode] = name.split('#');
 
@@ -29,20 +36,32 @@ export default function Page() {
 			}).then((res) => res.json())
 		)?.Response?.[0];
 
+		if (!member) return setError(`Can't find player "${name}" in Bungie's database. Please check the name and try again`);
+
+		async function f(url: string) {
+			const response = await fetch(new URL(`${root}/${url}?components=100%2C200%2C1000%2C205`), {
+				method: 'GET',
+				headers: {
+					'x-api-key': APIKey,
+				},
+			}).then((res) => res.json());
+
+			return response?.Response || response;
+		}
+
 		if (member) {
 			const { membershipType, membershipId } = member;
 
-			const user = (
-				await fetch(new URL(`${root}/Destiny2/${membershipType}/Profile/${membershipId}/?components=100%2C200%2C1000%2C205`), {
-					method: 'GET',
-					headers: {
-						'x-api-key': APIKey,
-					},
-				}).then((res) => res.json())
-			)?.Response;
+			const profile = await f(`Destiny2/${membershipType}/Profile/${membershipId}`);
+
+			const characters = await Promise.all(Object.keys(profile.characters.data).map(async (id) => await f(`Destiny2/${membershipType}/Profile/${membershipId}/Character/${id}`)));
+
+			const user = { ...profile, characters };
+
+			console.log(user);
 
 			setUser(user);
-			console.log(user);
+			setError('');
 		}
 	}
 
@@ -53,13 +72,9 @@ export default function Page() {
 				<button onClick={searchPlayer}>Search</button>
 			</center>
 
-			{user && (
-				<div className="profile-card">
-					{user.profile.data.userInfo.bungieGlobalDisplayName}#{user.profile.data.userInfo.bungieGlobalDisplayNameCode}
-				</div>
-			)}
+			<Suspense fallback={<Loading />}>
+				<DestinyTeamViewer user={user} error={error} users={users} />
+			</Suspense>
 		</main>
 	);
 }
-
-function getUser(displayName: string) {}
