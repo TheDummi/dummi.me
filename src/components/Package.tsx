@@ -3,7 +3,11 @@
 import Markdown from 'markdown-to-jsx';
 
 export default function Package({ pkg }: { pkg: any }) {
-	const versions = Object.values(pkg.versions).map((pkg: any) => <a href={`https://www.npmjs.com/package/${pkg.name}/v/${pkg.version}`}>{pkg.version}</a>);
+	const versions = Object.values(pkg.versions).map((pkg: any) => (
+		<a key={pkg.version} href={`https://www.npmjs.com/package/${pkg.name}/v/${pkg.version}`}>
+			{pkg.version}
+		</a>
+	));
 
 	const date = new Date(pkg.time.modified);
 
