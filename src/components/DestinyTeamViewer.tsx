@@ -25,7 +25,7 @@ export default function DestinyTeamViewer({ user, error, users }: { user: any; e
 			<div className="profile-card">
 				{user.profile.data.userInfo.bungieGlobalDisplayName}#{user.profile.data.userInfo.bungieGlobalDisplayNameCode}
 				{characters.map((character: any) => (
-					<img src={root + character.emblemBackgroundPath}></img>
+					<img key={character.characterId} src={root + character.emblemBackgroundPath}></img>
 				))}
 			</div>
 		);
