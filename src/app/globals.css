@@ -31,6 +31,23 @@ main {
 	top: 7vh;
 }
 
+input {
+	width: 15%;
+	background-color: var(--xernerx-black);
+	padding: 5px;
+	border-radius: 5px;
+	box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.4);
+	margin: 2.5px;
+}
+
+button {
+	background-color: var(--xernerx-black);
+	padding: 5px;
+	border-radius: 5px;
+	box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.4);
+	margin: 2.5px;
+}
+
 .rainbow {
 	width: 100%;
 	height: 0.5vh;
@@ -41,6 +58,31 @@ main {
 	position: absolute;
 	bottom: 0;
 	box-shadow: 2px 2px 4px 4px rgba(0, 0, 0, 0.4);
+}
+
+.profile-card {
+	border-radius: 0.25rem;
+	background-color: var(--xernerx-black);
+	padding: 5px;
+	margin: 5px;
+}
+
+.sidebar {
+	position: fixed;
+	width: 10%;
+	display: flex;
+	flex-direction: column;
+	/* justify-items: center; */
+	background-color: var(--xernerx-black);
+	padding: 5px;
+	padding-top: 50px;
+	margin-top: -50px;
+	height: 100%;
+}
+
+.content {
+	margin-left: 10%;
+	padding: 10px;
 }
 
 @keyframes rainbow {
