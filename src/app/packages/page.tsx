@@ -11,7 +11,7 @@ export default async function Page() {
 		)
 			.filter((x: any) => x.topics.includes('package'))
 			.map(async (pkg: any) => {
-				const data = await fetch(String(root + pkg.name)).then((res) => res.json());
+				const data = await fetch(String(root + pkg?.name)).then((res) => res.json());
 
 				if (data) return data;
 			})
