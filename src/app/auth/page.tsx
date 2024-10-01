@@ -4,6 +4,7 @@ import axios from 'axios';
 import url from 'url';
 import { config } from 'dotenv';
 import mongoose from 'mongoose';
+import Cookie from '@/components/Cookie';
 config();
 
 export default async function Home(request: any) {
@@ -69,6 +70,8 @@ export default async function Home(request: any) {
 				},
 			});
 		}
+
+		<Cookie key={'token'} value={author.access.token} />;
 
 		// const refreshFormData = new url.URLSearchParams({
 		// 	client_id: process.env.ClientId as string,
