@@ -6,9 +6,7 @@ export default async function Page() {
 	const root = `https://registry.npmjs.org/`;
 
 	const packages = await Promise.all(
-		(
-			await fetch('https://api.github.com/users/TheDummi/repos').then((res) => res.json())
-		)
+		(await fetch('https://api.github.com/users/TheDummi/repos').then((res) => res.json()))
 			.filter((x: any) => x.topics.includes('package'))
 			.map(async (pkg: any) => {
 				const data = await fetch(String(root + pkg?.name)).then((res) => res.json());

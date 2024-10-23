@@ -2,12 +2,12 @@
 'use client';
 import DestinyTeamViewer from '@/components/DestinyTeamViewer';
 import Loading from '@/components/Loading';
-import { Suspense, useState, lazy } from 'react';
+import { Suspense, useState } from 'react';
 
 export default function Page() {
 	const root = `https://www.bungie.net/Platform`;
-	const APIKey = 'f045a47470ce4411a229c0bb336e6da7';
-	const clientID = '38825';
+	const APIKey = '1556ec5770b34ba38bf7bdbb84846ce2';
+	const clientID = '48397';
 
 	const [name, setName] = useState('');
 	const [error, setError] = useState('');
@@ -56,9 +56,11 @@ export default function Page() {
 
 			const characters = await Promise.all(Object.keys(profile.characters.data).map(async (id) => await f(`Destiny2/${membershipType}/Profile/${membershipId}/Character/${id}`)));
 
-			const user = { ...profile, characters };
+			const settings = await f(`Destiny2/Settings`);
 
-			console.log(user);
+			console.log(settings);
+
+			const user = { ...profile, characters };
 
 			setUser(user);
 			setError('');

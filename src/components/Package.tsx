@@ -17,7 +17,7 @@ export default function Package({ pkg }: { pkg: any }) {
 
 			<div className="flex">
 				<div className="readme">
-					<Markdown>{pkg.readme}</Markdown>
+					<Markdown>{pkg.description}</Markdown>
 				</div>
 
 				<div className="pkg-info">
@@ -46,12 +46,9 @@ export default function Package({ pkg }: { pkg: any }) {
 							<td>{pkg.license}</td>
 						</tr>
 					</table>
-					<p>
-						<h4>Description</h4>
-						{pkg.description}
-					</p>
 
 					<p className="flex">
+						<h4>Links</h4>
 						<a href={`https://github.com/TheDummi/${pkg.name}`} target="_blank">
 							<img src={'icons/github.png'} className="link-icon"></img>
 						</a>

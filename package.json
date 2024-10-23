@@ -10,6 +10,7 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
+		"@clerk/nextjs": "^6.0.0",
 		"axios": "^1.7.4",
 		"dotenv": "^16.4.5",
 		"markdown-to-jsx": "^7.4.7",
